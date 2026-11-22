@@ -11,6 +11,7 @@ const state = {
   search: '',
   sort: 'featured',
   activeGameId: null,
+  publicBase: './',
 };
 
 const els = {
@@ -102,6 +103,21 @@ function showToast(message) {
   }, 2400);
 }
 
+function resolveAssetUrl(rawPath) {
+  const path = String(rawPath || '').trim();
+  if (!path) return '';
+  if (path.startsWith('/src/')) {
+    return `.${path}`;
+  }
+  if (path.startsWith('/games/')) {
+    return `${state.publicBase}${path.slice(1)}`;
+  }
+  if (path.startsWith('./games/')) {
+    return `${state.publicBase}${path.slice(2)}`;
+  }
+  return path;
+}
+
 /**
  * Safely parses an iframe HTML string from games.json and builds a clean <iframe> element.
  */
@@ -118,8 +134,8 @@ function buildSafeIframe(iframeMarkup, fallbackTitle) {
     return null;
   }
 
-  // Allow relative local paths (/games/...) or http/https URLs only
-  const isRelative = rawSrc.startsWith('/') && !rawSrc.startsWith('//');
+  // Allow relative local paths (/games/..., ./games/...) or http/https URLs only
+  const isRelative = (rawSrc.startsWith('/') && !rawSrc.startsWith('//')) || rawSrc.startsWith('./') || rawSrc.startsWith('../');
   let isSafeProtocol = isRelative;
   if (!isRelative) {
     try {
@@ -135,7 +151,7 @@ function buildSafeIframe(iframeMarkup, fallbackTitle) {
   }
 
   const frame = document.createElement('iframe');
-  frame.src = rawSrc;
+  frame.src = resolveAssetUrl(rawSrc);
   frame.title = parsed.getAttribute('title') || fallbackTitle || 'Embedded Game';
   frame.loading = 'eager';
   frame.referrerPolicy = 'no-referrer';
@@ -236,7 +252,7 @@ function renderFeatured() {
 
   const featured = games[0];
   els.featuredThumb.parentElement.classList.remove('is-broken');
-  els.featuredThumb.src = featured.thumbnail || '';
+  els.featuredThumb.src = resolveAssetUrl(featured.thumbnail);
   els.featuredThumb.alt = `${featured.title} cover art`;
   els.featuredThumb.onerror = () => {
     els.featuredThumb.parentElement.classList.add('is-broken');
@@ -284,7 +300,7 @@ function renderCatalog() {
     }
 
     const img = document.createElement('img');
-    img.src = game.thumbnail || '';
+    img.src = resolveAssetUrl(game.thumbnail);
     img.alt = `${game.title} thumbnail`;
     img.loading = 'lazy';
     img.referrerPolicy = 'no-referrer';
@@ -665,7 +681,29 @@ function bindEvents() {
   });
 }
 
-async function init() {
+async function loadCatalog() {
+  const candidates = [
+    { url: './games.json', base: './' },
+    { url: './public/games.json', base: './public/' },
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      const response = await fetch(candidate.url);
+      if (!response.ok) continue;
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        state.publicBase = candidate.base;
+        return data;
+      }
+    } catch {
+      // Try next candidate
+    }
+  }
+  throw new Error('Catalog not found');
+}
+
+export async function startApp() {
   state.favorites = readStorageArray(STORAGE_FAVORITES_KEY);
   state.recentIds = readStorageArray(STORAGE_RECENT_KEY);
   state.customGames = readStorageArray(STORAGE_CUSTOM_GAMES_KEY);
@@ -673,19 +711,12 @@ async function init() {
   bindEvents();
 
   try {
-    const response = await fetch('/games.json');
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    const data = await response.json();
-    state.baseGames = Array.isArray(data) ? data : [];
+    state.baseGames = await loadCatalog();
     renderFeatured();
     renderCatalog();
   } catch {
     els.catalogStatus.hidden = false;
-    els.catalogStatus.textContent = 'Unable to load games.json. Check that public/games.json exists and contains valid JSON.';
+    els.catalogStatus.textContent = 'Unable to load games.json. Check that games.json exists and contains valid JSON.';
     els.featuredTitle.textContent = 'Catalog unavailable';
   }
 }
-
-init();
