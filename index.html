@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArcadeVault — Unblocked Iframe Games</title>
+    <meta
+      name="description"
+      content="An unblocked browser games library that loads playable iframe games from a JSON catalog."
+    />
+    <meta property="og:title" content="ArcadeVault — Unblocked Iframe Games" />
+    <meta
+      property="og:description"
+      content="An unblocked browser games library that loads playable iframe games from a JSON catalog."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to games</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#top" class="brand-wordmark" id="brand-home-link">ArcadeVault</a>
+
+        <nav class="main-nav" aria-label="Game categories">
+          <button type="button" class="nav-link is-active" data-category="all">All Games</button>
+          <button type="button" class="nav-link" data-category="Arcade">Arcade</button>
+          <button type="button" class="nav-link" data-category="Puzzle">Puzzle</button>
+          <button type="button" class="nav-link" data-category="favorites">Favorites</button>
+        </nav>
+
+        <div class="header-action">
+          <button type="button" class="btn btn-primary" id="open-add-modal-btn">Add Iframe</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Active Game Theater (hidden until a game is launched) -->
+      <section id="player-stage" class="player-stage" hidden aria-label="Active game player">
+        <div class="container">
+          <div class="stage-bar">
+            <div class="stage-title-group">
+              <button type="button" class="btn btn-ghost" id="back-to-library-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>Back to Library</span>
+              </button>
+              <div class="stage-heading">
+                <h1 id="stage-game-title" class="stage-game-title">Game Title</h1>
+                <p id="stage-game-meta" class="stage-game-meta">Category · Controls</p>
+              </div>
+            </div>
+
+            <div class="stage-controls">
+              <button type="button" class="btn btn-secondary" id="stage-favorite-btn" aria-pressed="false">
+                Save Favorite
+              </button>
+              <button type="button" class="btn btn-secondary" id="stage-reload-btn">
+                Reload
+              </button>
+              <button type="button" class="btn btn-secondary" id="stage-json-btn" aria-expanded="false">
+                Iframe Code
+              </button>
+              <button type="button" class="btn btn-primary" id="stage-fullscreen-btn">
+                Fullscreen
+              </button>
+            </div>
+          </div>
+
+          <div id="stage-iframe-wrapper" class="stage-iframe-wrapper">
+            <div id="stage-iframe-mount" class="stage-iframe-mount"></div>
+          </div>
+
+          <div id="stage-json-drawer" class="stage-json-drawer" hidden>
+            <div class="drawer-header">
+              <span class="drawer-title">Stored JSON Iframe Entry</span>
+              <button type="button" class="btn btn-ghost btn-sm" id="copy-entry-json-btn">Copy JSON</button>
+            </div>
+            <pre id="stage-json-code" class="code-block"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Library View -->
+      <div id="library-view">
+        <section class="hero-section">
+          <div class="container hero-grid">
+            <div class="hero-copy">
+              <h1 class="hero-title">Play instant browser games with zero blocks</h1>
+              <p class="hero-subtitle">
+                Every title below is loaded directly from a clean JSON catalog of embedded iframes. Pick a game to launch it full-stage, save favorites locally, or add your own iframe.
+              </p>
+              <div class="hero-actions">
+                <button type="button" class="btn btn-primary" id="random-game-btn">Play Random Game</button>
+                <button type="button" class="btn btn-ghost" id="view-catalog-json-btn">Inspect games.json</button>
+              </div>
+            </div>
+
+            <article class="featured-card" id="featured-spotlight">
+              <div class="featured-media">
+                <img
+                  id="featured-thumb"
+                  src=""
+                  alt="Featured game artwork"
+                  referrerPolicy="no-referrer"
+                />
+                <div class="media-fallback" aria-hidden="true">
+                  <span class="fallback-label" id="featured-fallback-title">Featured</span>
+                </div>
+              </div>
+              <div class="featured-body">
+                <p class="kicker-text" id="featured-meta">Featured · Arcade</p>
+                <h2 class="featured-title" id="featured-title">Loading catalog...</h2>
+                <p class="featured-desc" id="featured-desc"></p>
+                <div class="featured-footer">
+                  <button type="button" class="btn btn-primary" id="featured-play-btn">Play Now</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="catalog-section" aria-label="Game catalog">
+          <div class="container">
+            <div class="catalog-toolbar">
+              <div class="toolbar-left">
+                <h2 class="section-heading" id="catalog-heading">Game Library</h2>
+                <span class="catalog-count" id="catalog-count">0 games</span>
+              </div>
+
+              <div class="toolbar-controls">
+                <div class="mobile-category-select-wrap">
+                  <label for="mobile-category-select" class="sr-only">Filter category</label>
+                  <select id="mobile-category-select" class="form-select">
+                    <option value="all">All Games</option>
+                    <option value="Arcade">Arcade</option>
+                    <option value="Puzzle">Puzzle</option>
+                    <option value="favorites">Favorites</option>
+                  </select>
+                </div>
+
+                <div class="search-wrap">
+                  <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="M21 21l-4.35-4.35" />
+                  </svg>
+                  <label for="search-input" class="sr-only">Search games</label>
+                  <input
+                    id="search-input"
+                    type="search"
+                    class="search-input"
+                    placeholder="Search games..."
+                    autocomplete="off"
+                  />
+                </div>
+
+                <label for="sort-select" class="sr-only">Sort games</label>
+                <select id="sort-select" class="form-select">
+                  <option value="featured">Featured Order</option>
+                  <option value="title">Title (A–Z)</option>
+                  <option value="recent">Recently Played</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="catalog-status" class="catalog-status" hidden></div>
+            <div id="games-grid" class="games-grid"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p class="footer-copy">ArcadeVault · Static HTML, CSS, JS &amp; JSON Iframe Catalog</p>
+        <div class="footer-links">
+          <button type="button" class="footer-link-btn" id="export-json-btn">Download games.json</button>
+          <button type="button" class="footer-link-btn" id="reset-custom-btn" hidden>Reset Custom Games</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Add Custom Iframe Modal -->
+    <div id="add-modal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="add-modal-title">
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2 id="add-modal-title" class="modal-title">Add Iframe Game</h2>
+          <button type="button" class="btn btn-ghost btn-icon" id="close-add-modal-btn" aria-label="Close modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form id="add-game-form" class="modal-form">
+          <div class="form-field">
+            <label for="game-title-input" class="form-label">Game Title</label>
+            <input id="game-title-input" name="title" type="text" class="form-input" placeholder="e.g. Classic Tetris" required maxlength="60" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="game-category-input" class="form-label">Category</label>
+              <select id="game-category-input" name="category" class="form-select form-select-full">
+                <option value="Arcade">Arcade</option>
+                <option value="Puzzle">Puzzle</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="game-controls-input" class="form-label">Controls</label>
+              <input id="game-controls-input" name="controls" type="text" class="form-input" placeholder="e.g. Arrow Keys" maxlength="40" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="game-desc-input" class="form-label">Description</label>
+            <input id="game-desc-input" name="description" type="text" class="form-input" placeholder="Short summary of the gameplay" maxlength="140" />
+          </div>
+
+          <div class="form-field">
+            <label for="game-iframe-input" class="form-label">Iframe HTML or Game URL</label>
+            <textarea
+              id="game-iframe-input"
+              name="iframe"
+              class="form-textarea"
+              rows="3"
+              placeholder='<iframe src="https://example.com/game/" allowfullscreen></iframe>'
+              required
+            ></textarea>
+            <p class="form-hint">Paste a full &lt;iframe&gt; tag or a direct URL. It will be stored in JSON format locally.</p>
+          </div>
+
+          <p id="add-form-error" class="form-error" hidden></p>
+
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancel-add-modal-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Game</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Inspect games.json Modal -->
+    <div id="json-modal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="json-modal-title">
+      <div class="modal-panel modal-panel-wide">
+        <div class="modal-header">
+          <h2 id="json-modal-title" class="modal-title">games.json Catalog</h2>
+          <button type="button" class="btn btn-ghost btn-icon" id="close-json-modal-btn" aria-label="Close modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="json-modal-body">
+          <p class="json-modal-desc">
+            Each entry stores the game metadata alongside its embedded <code>iframe</code> tag. Copy or download this JSON to update your hosted <code>games.json</code> file.
+          </p>
+          <pre id="full-json-code" class="code-block code-block-tall"></pre>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="copy-all-json-btn">Copy JSON</button>
+          <button type="button" class="btn btn-primary" id="download-all-json-btn">Download games.json</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>

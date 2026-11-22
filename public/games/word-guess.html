@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Word Guess</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: #0d121a;
+        color: #f1f5f9;
+        font-family: system-ui, -apple-system, sans-serif;
+        user-select: none;
+        padding: 12px;
+      }
+      .hud {
+        width: min(94vw, 420px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
+      }
+      .stats { display: flex; gap: 14px; font-weight: 600; }
+      .stats strong { color: #f59e0b; }
+      button {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.14);
+        background: #1a2332;
+        color: #f1f5f9;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      button:hover { background: #243044; }
+      .board {
+        display: grid;
+        grid-template-rows: repeat(6, 50px);
+        gap: 6px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: repeat(5, 50px);
+        gap: 6px;
+      }
+      .tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        border: 2px solid #2a3648;
+        background: #141b26;
+        font-size: 22px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .tile.filled { border-color: #64748b; }
+      .tile.correct { background: #059669; border-color: #059669; color: #fff; }
+      .tile.present { background: #d97706; border-color: #d97706; color: #fff; }
+      .tile.absent { background: #273244; border-color: #273244; color: #94a3b8; }
+      .msg {
+        min-height: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fbbf24;
+        text-align: center;
+      }
+      .kb {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        width: min(96vw, 460px);
+      }
+      .kb-row {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+      }
+      .key {
+        flex: 1;
+        min-width: 28px;
+        height: 42px;
+        padding: 0 6px;
+        font-size: 13px;
+        border-radius: 6px;
+      }
+      .key.wide { flex: 1.5; font-size: 12px; }
+      .key.correct { background: #059669; border-color: #059669; }
+      .key.present { background: #d97706; border-color: #d97706; }
+      .key.absent { background: #1e2633; color: #64748b; }
+    </style>
+  </head>
+  <body>
+    <div class="hud">
+      <div class="stats">
+        <span>Streak <strong id="streak-el">0</strong></span>
+        <span>Solved <strong id="solved-el">0</strong></span>
+      </div>
+      <button type="button" id="new-word-btn">New Word</button>
+    </div>
+
+    <div class="board" id="board"></div>
+    <div class="msg" id="msg">Guess the 5-letter word in 6 tries.</div>
+    <div class="kb" id="keyboard"></div>
+
+    <script>
+      const WORDS = [
+        'APPLE','BRAVE','CHAIR','DANCE','EAGLE','FLAME','GRAPE','HOUSE','INDEX','JOKER',
+        'KNIFE','LEMON','MANGO','NIGHT','OCEAN','PIANO','QUEST','RIVER','STONE','TIGER',
+        'ULTRA','VIVID','WATER','XENON','YOUTH','ZEBRA','ALERT','BRICK','CLOUD','DRIVE',
+        'EARTH','FROST','GLORY','HEART','IVORY','JOINT','KARMA','LIGHT','MAGIC','NORTH',
+        'ORBIT','PEARL','QUICK','RADIO','SOLAR','TRAIN','URBAN','VALID','WHEEL','YIELD',
+        'ANCHOR','BADGE','BLAZE','CRAFT','DREAM','EMBER','FOCUS','GIANT','HAVEN','INPUT',
+        'LUNAR','MAPLE','NOBLE','OLIVE','PRISM','QUART','RADAR','SCALE','TRACK','UNITY',
+      ].filter((w) => w.length === 5);
+
+      const boardEl = document.getElementById('board');
+      const kbEl = document.getElementById('keyboard');
+      const msgEl = document.getElementById('msg');
+      const streakEl = document.getElementById('streak-el');
+      const solvedEl = document.getElementById('solved-el');
+      const newWordBtn = document.getElementById('new-word-btn');
+
+      let streak = Number(localStorage.getItem('av_word_streak') || 0);
+      let solved = Number(localStorage.getItem('av_word_solved') || 0);
+      streakEl.textContent = String(streak);
+      solvedEl.textContent = String(solved);
+
+      let target = '';
+      let guesses = [];
+      let current = '';
+      let over = false;
+      let keyStates = {};
+
+      const KB_ROWS = [
+        ['Q','W','E','R','T','Y','U','I','O','P'],
+        ['A','S','D','F','G','H','J','K','L'],
+        ['ENTER','Z','X','C','V','B','N','M','DEL'],
+      ];
+
+      function evaluate(guess, answer) {
+        const result = Array(5).fill('absent');
+        const counts = {};
+        for (const ch of answer) counts[ch] = (counts[ch] || 0) + 1;
+        for (let i = 0; i < 5; i++) {
+          if (guess[i] === answer[i]) {
+            result[i] = 'correct';
+            counts[guess[i]]--;
+          }
+        }
+        for (let i = 0; i < 5; i++) {
+          if (result[i] === 'correct') continue;
+          if (counts[guess[i]] > 0) {
+            result[i] = 'present';
+            counts[guess[i]]--;
+          }
+        }
+        return result;
+      }
+
+      function render() {
+        boardEl.innerHTML = '';
+        for (let r = 0; r < 6; r++) {
+          const rowEl = document.createElement('div');
+          rowEl.className = 'row';
+          const committed = guesses[r];
+          const states = committed ? evaluate(committed, target) : null;
+          for (let c = 0; c < 5; c++) {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            if (committed) {
+              tile.textContent = committed[c];
+              tile.classList.add(states[c]);
+            } else if (r === guesses.length && current[c]) {
+              tile.textContent = current[c];
+              tile.classList.add('filled');
+            }
+            rowEl.appendChild(tile);
+          }
+          boardEl.appendChild(rowEl);
+        }
+
+        kbEl.innerHTML = '';
+        KB_ROWS.forEach((row) => {
+          const rEl = document.createElement('div');
+          rEl.className = 'kb-row';
+          row.forEach((k) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'key';
+            if (k === 'ENTER' || k === 'DEL') btn.classList.add('wide');
+            if (keyStates[k]) btn.classList.add(keyStates[k]);
+            btn.textContent = k;
+            btn.addEventListener('click', () => handleKey(k));
+            rEl.appendChild(btn);
+          });
+          kbEl.appendChild(rEl);
+        });
+      }
+
+      function handleKey(k) {
+        if (over) return;
+        if (k === 'DEL' || k === 'BACKSPACE') {
+          current = current.slice(0, -1);
+          render();
+          return;
+        }
+        if (k === 'ENTER') {
+          if (current.length < 5) {
+            msgEl.textContent = 'Enter 5 letters before submitting.';
+            return;
+          }
+          const states = evaluate(current, target);
+          const priority = { absent: 1, present: 2, correct: 3 };
+          for (let i = 0; i < 5; i++) {
+            const ch = current[i];
+            const prev = keyStates[ch];
+            if (!prev || priority[states[i]] > priority[prev]) {
+              keyStates[ch] = states[i];
+            }
+          }
+          guesses.push(current);
+          if (current === target) {
+            over = true;
+            streak++;
+            solved++;
+            localStorage.setItem('av_word_streak', String(streak));
+            localStorage.setItem('av_word_solved', String(solved));
+            streakEl.textContent = String(streak);
+            solvedEl.textContent = String(solved);
+            msgEl.textContent = `Solved in ${guesses.length}/6 tries!`;
+          } else if (guesses.length === 6) {
+            over = true;
+            streak = 0;
+            localStorage.setItem('av_word_streak', '0');
+            streakEl.textContent = '0';
+            msgEl.textContent = `Out of tries — word was ${target}.`;
+          } else {
+            msgEl.textContent = `${6 - guesses.length} tries remaining.`;
+          }
+          current = '';
+          render();
+          return;
+        }
+        if (/^[A-Z]$/.test(k) && current.length < 5) {
+          current += k;
+          render();
+        }
+      }
+
+      function startNew() {
+        target = WORDS[Math.floor(Math.random() * WORDS.length)];
+        guesses = [];
+        current = '';
+        over = false;
+        keyStates = {};
+        msgEl.textContent = 'Guess the 5-letter word in 6 tries.';
+        render();
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        const k = e.key.toUpperCase();
+        if (k === 'ENTER' || k === 'BACKSPACE' || /^[A-Z]$/.test(k)) {
+          e.preventDefault();
+          handleKey(k);
+        }
+      });
+
+      newWordBtn.addEventListener('click', startNew);
+      startNew();
+    </script>
+  </body>
+</html>

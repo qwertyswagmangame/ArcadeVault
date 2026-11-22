@@ -1,0 +1,110 @@
+[
+  {
+    "id": "block-stack",
+    "title": "Block Stack (Tetris)",
+    "category": "Puzzle",
+    "controls": "Arrows to Move/Rotate · Space to Drop",
+    "description": "Rotate and stack falling tetrominoes to clear full horizontal rows before the stack reaches the top.",
+    "thumbnail": "/src/assets/images/thumb_tetris_1795322367721.jpg",
+    "iframe": "<iframe src=\"/games/tetris.html\" title=\"Block Stack\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "sky-flap",
+    "title": "Sky Flap",
+    "category": "Arcade",
+    "controls": "Space, Up Arrow, or Click",
+    "description": "Tap to keep the geometric bird airborne and thread cleanly through endless emerald pipe gaps.",
+    "thumbnail": "/src/assets/images/thumb_flappy_1795322367551.jpg",
+    "iframe": "<iframe src=\"/games/flappy-bird.html\" title=\"Sky Flap\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "desert-dash",
+    "title": "Desert Dash (Dino Run)",
+    "category": "Arcade",
+    "controls": "Space / Up to Jump · Down to Duck",
+    "description": "Sprint across the desert horizon, leap over cacti, and duck beneath swooping flyers as pace accelerates.",
+    "thumbnail": "/src/assets/images/thumb_dino_1795322368037.jpg",
+    "iframe": "<iframe src=\"/games/dino-runner.html\" title=\"Desert Dash\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "paddle-pong",
+    "title": "Paddle Pong",
+    "category": "Arcade",
+    "controls": "Mouse / W-S (1P) · Arrows (2P)",
+    "description": "Fast-paced table tennis arcade showdown featuring solo CPU matches and local two-player mode.",
+    "thumbnail": "/src/assets/images/thumb_pong_1795322368239.jpg",
+    "iframe": "<iframe src=\"/games/pong.html\" title=\"Paddle Pong\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "maze-chaser",
+    "title": "Maze Chaser",
+    "category": "Arcade",
+    "controls": "Arrow Keys or WASD",
+    "description": "Sweep every glowing dot out of the labyrinth while dodging patrolling guardians or turning the tables with power orbs.",
+    "thumbnail": "/src/assets/images/thumb_pac_maze_1795322367637.jpg",
+    "iframe": "<iframe src=\"/games/pac-maze.html\" title=\"Maze Chaser\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "word-guess",
+    "title": "Word Guess",
+    "category": "Puzzle",
+    "controls": "Keyboard or On-Screen Keys",
+    "description": "Crack the hidden five-letter word in six tries using color-coded letter and position clues.",
+    "thumbnail": "/src/assets/images/thumb_word_guess_1795322367690.jpg",
+    "iframe": "<iframe src=\"/games/word-guess.html\" title=\"Word Guess\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "serpent-grid",
+    "title": "Serpent Grid (Snake)",
+    "category": "Arcade",
+    "controls": "Arrow Keys or WASD",
+    "description": "Navigate the growing serpent across the grid, collect golden apples, and avoid collisions as speed increases.",
+    "thumbnail": "/src/assets/images/thumb_snake_1795322107359.jpg",
+    "iframe": "<iframe src=\"/games/snake.html\" title=\"Serpent Grid\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "brick-breaker",
+    "title": "Brick Breaker",
+    "category": "Arcade",
+    "controls": "Mouse or Left / Right Arrows",
+    "description": "Deflect the energy ball with your paddle to shatter multi-row brick walls and build combo multipliers.",
+    "thumbnail": "/src/assets/images/thumb_brick_breaker_1795322107878.jpg",
+    "iframe": "<iframe src=\"/games/brick-breaker.html\" title=\"Brick Breaker\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "tile-2048",
+    "title": "2048 Tile Merge",
+    "category": "Puzzle",
+    "controls": "Arrow Keys or Swipe",
+    "description": "Slide numbered tiles across the 4x4 slate board to combine matching powers of two and reach 2048.",
+    "thumbnail": "/src/assets/images/thumb_2048_1795322107457.jpg",
+    "iframe": "<iframe src=\"/games/2048.html\" title=\"2048 Tile Merge\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "minesweeper",
+    "title": "Minesweeper",
+    "category": "Puzzle",
+    "controls": "Click to Reveal · Right-Click to Flag",
+    "description": "Deduce hidden mine locations using adjacency clues and clear the entire grid without triggering a blast.",
+    "thumbnail": "/src/assets/images/thumb_minesweeper_1795322105849.jpg",
+    "iframe": "<iframe src=\"/games/minesweeper.html\" title=\"Minesweeper\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "card-flip-match",
+    "title": "Card Flip Match",
+    "category": "Puzzle",
+    "controls": "Mouse or Touch",
+    "description": "Flip geometric symbol cards two at a time to uncover all matching pairs in as few moves as possible.",
+    "thumbnail": "/src/assets/images/thumb_memory_match_1795322106886.jpg",
+    "iframe": "<iframe src=\"/games/memory-match.html\" title=\"Card Flip Match\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  },
+  {
+    "id": "asteroid-dodge",
+    "title": "Asteroid Dodge",
+    "category": "Arcade",
+    "controls": "WASD, Arrows, or Mouse",
+    "description": "Pilot your interceptor through dense asteroid fields, collect shield cells, and survive rising wave speeds.",
+    "thumbnail": "/src/assets/images/thumb_space_dodger_1795322107859.jpg",
+    "iframe": "<iframe src=\"/games/space-dodger.html\" title=\"Asteroid Dodge\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+  }
+]
