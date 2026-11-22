@@ -156,7 +156,16 @@ function buildSafeIframe(iframeMarkup, fallbackTitle) {
   frame.loading = 'eager';
   frame.referrerPolicy = 'no-referrer';
   frame.setAttribute('allowfullscreen', '');
-  frame.setAttribute('allow', 'fullscreen; autoplay; gamepad');
+  const allowAttr = parsed.getAttribute('allow');
+  frame.setAttribute('allow', allowAttr || 'fullscreen; autoplay; gamepad');
+  const sandboxAttr = parsed.getAttribute('sandbox');
+  if (sandboxAttr !== null) {
+    frame.setAttribute('sandbox', sandboxAttr);
+  }
+  const scrollingAttr = parsed.getAttribute('scrolling');
+  if (scrollingAttr) {
+    frame.setAttribute('scrolling', scrollingAttr);
+  }
   return frame;
 }
 
@@ -185,8 +194,19 @@ function normalizeIframeInput(rawInput, title) {
     return { error: 'Invalid iframe code. Ensure it includes a valid http(s) or relative src attribute.' };
   }
 
+  const esc = (val) => String(val).replace(/"/g, '&quot;');
+  const attrs = [
+    `src="${esc(testFrame.getAttribute('src'))}"`,
+    `title="${esc(testFrame.title)}"`,
+    `allow="${esc(testFrame.getAttribute('allow') || 'fullscreen')}"`,
+  ];
+  if (testFrame.hasAttribute('sandbox')) {
+    attrs.push(`sandbox="${esc(testFrame.getAttribute('sandbox'))}"`);
+  }
+  attrs.push('allowfullscreen', 'loading="lazy"');
+
   return {
-    iframe: `<iframe src="${testFrame.getAttribute('src')}" title="${testFrame.title.replace(/"/g, '&quot;')}" allow="fullscreen" allowfullscreen loading="lazy"></iframe>`,
+    iframe: `<iframe ${attrs.join(' ')}></iframe>`,
   };
 }
 
@@ -244,15 +264,26 @@ function updateCategoryUI() {
 
 function renderFeatured() {
   const games = getAllGames();
+  const heroGrid = els.featuredSpotlight.parentElement;
   if (games.length === 0) {
     els.featuredSpotlight.hidden = true;
+    if (heroGrid) heroGrid.classList.add('is-empty');
+    els.randomGameBtn.disabled = true;
     return;
   }
   els.featuredSpotlight.hidden = false;
+  if (heroGrid) heroGrid.classList.remove('is-empty');
+  els.randomGameBtn.disabled = false;
 
   const featured = games[0];
-  els.featuredThumb.parentElement.classList.remove('is-broken');
-  els.featuredThumb.src = resolveAssetUrl(featured.thumbnail);
+  const thumbUrl = resolveAssetUrl(featured.thumbnail);
+  if (!thumbUrl) {
+    els.featuredThumb.removeAttribute('src');
+    els.featuredThumb.parentElement.classList.add('is-broken');
+  } else {
+    els.featuredThumb.parentElement.classList.remove('is-broken');
+    els.featuredThumb.src = thumbUrl;
+  }
   els.featuredThumb.alt = `${featured.title} cover art`;
   els.featuredThumb.onerror = () => {
     els.featuredThumb.parentElement.classList.add('is-broken');
@@ -266,6 +297,7 @@ function renderFeatured() {
 
 function renderCatalog() {
   updateCategoryUI();
+  const totalGames = getAllGames().length;
   const filtered = getFilteredGames();
   const favCount = state.favorites.length;
   const gameWord = filtered.length === 1 ? 'game' : 'games';
@@ -276,7 +308,9 @@ function renderCatalog() {
 
   if (filtered.length === 0) {
     els.catalogStatus.hidden = false;
-    if (state.category === 'favorites' && state.favorites.length === 0) {
+    if (totalGames === 0) {
+      els.catalogStatus.textContent = 'No games in games.json yet. Click "Add Iframe" to add a game or populate public/games.json.';
+    } else if (state.category === 'favorites' && state.favorites.length === 0) {
       els.catalogStatus.textContent = 'No favorite games saved yet. Click Save on any game card to pin it here.';
     } else {
       els.catalogStatus.textContent = 'No games matched your current filter or search query.';
@@ -293,14 +327,17 @@ function renderCatalog() {
     const card = document.createElement('article');
     card.className = 'game-card';
 
+    const thumbUrl = resolveAssetUrl(game.thumbnail);
     const media = document.createElement('div');
     media.className = 'card-media';
-    if (!game.thumbnail) {
+    if (!thumbUrl) {
       media.classList.add('is-broken');
     }
 
     const img = document.createElement('img');
-    img.src = resolveAssetUrl(game.thumbnail);
+    if (thumbUrl) {
+      img.src = thumbUrl;
+    }
     img.alt = `${game.title} thumbnail`;
     img.loading = 'lazy';
     img.referrerPolicy = 'no-referrer';

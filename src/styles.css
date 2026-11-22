@@ -197,6 +197,12 @@ textarea {
   transform: translateY(1px);
 }
 
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .btn-sm {
   min-height: 36px;
   padding: 6px 12px;
@@ -743,8 +749,13 @@ textarea {
 .stage-json-drawer[hidden],
 .catalog-status[hidden],
 .form-error[hidden],
-.footer-link-btn[hidden] {
+.footer-link-btn[hidden],
+.featured-card[hidden] {
   display: none;
+}
+
+.hero-grid.is-empty {
+  grid-template-columns: 1fr;
 }
 
 .modal-panel {

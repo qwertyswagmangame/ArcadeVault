@@ -1,110 +1,47 @@
 [
   {
-    "id": "block-stack",
-    "title": "Block Stack (Tetris)",
-    "category": "Puzzle",
-    "controls": "Arrows to Move/Rotate · Space to Drop",
-    "description": "Rotate and stack falling tetrominoes to clear full horizontal rows before the stack reaches the top.",
-    "thumbnail": "/src/assets/images/thumb_tetris_1795322367721.jpg",
-    "iframe": "<iframe src=\"/games/tetris.html\" title=\"Block Stack\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "sky-flap",
-    "title": "Sky Flap",
-    "category": "Arcade",
-    "controls": "Space, Up Arrow, or Click",
-    "description": "Tap to keep the geometric bird airborne and thread cleanly through endless emerald pipe gaps.",
-    "thumbnail": "/src/assets/images/thumb_flappy_1795322367551.jpg",
-    "iframe": "<iframe src=\"/games/flappy-bird.html\" title=\"Sky Flap\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "desert-dash",
-    "title": "Desert Dash (Dino Run)",
-    "category": "Arcade",
-    "controls": "Space / Up to Jump · Down to Duck",
-    "description": "Sprint across the desert horizon, leap over cacti, and duck beneath swooping flyers as pace accelerates.",
-    "thumbnail": "/src/assets/images/thumb_dino_1795322368037.jpg",
-    "iframe": "<iframe src=\"/games/dino-runner.html\" title=\"Desert Dash\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "paddle-pong",
-    "title": "Paddle Pong",
-    "category": "Arcade",
-    "controls": "Mouse / W-S (1P) · Arrows (2P)",
-    "description": "Fast-paced table tennis arcade showdown featuring solo CPU matches and local two-player mode.",
-    "thumbnail": "/src/assets/images/thumb_pong_1795322368239.jpg",
-    "iframe": "<iframe src=\"/games/pong.html\" title=\"Paddle Pong\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "maze-chaser",
-    "title": "Maze Chaser",
+    "id": "snow-rider-3d",
+    "title": "Snow Rider 3D",
     "category": "Arcade",
     "controls": "Arrow Keys or WASD",
-    "description": "Sweep every glowing dot out of the labyrinth while dodging patrolling guardians or turning the tables with power orbs.",
-    "thumbnail": "/src/assets/images/thumb_pac_maze_1795322367637.jpg",
-    "iframe": "<iframe src=\"/games/pac-maze.html\" title=\"Maze Chaser\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+    "description": "Steer a sled down snowy mountain slopes, dodge trees and boulders, and collect gifts along the run.",
+    "thumbnail": "",
+    "iframe": "<iframe id=\"sandboxFrame\" allow=\"accelerometer *; autoplay *; camera *; clipboard-read *; clipboard-write *; encrypted-media *; fullscreen *; geolocation *; gyroscope *; local-network-access *; magnetometer *; microphone *; midi *; payment *; picture-in-picture *; screen-wake-lock *; sync-xhr *; usb *; web-share *\" sandbox=\"allow-downloads allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-storage-access-by-user-activation\" src=\"https://n-5tw2x5qrfd5auijsxjgwhggw2ulxi2g4lotdzoi-0lu-script.googleusercontent.com/userCodeAppPanel\"></iframe>"
   },
   {
-    "id": "word-guess",
-    "title": "Word Guess",
-    "category": "Puzzle",
-    "controls": "Keyboard or On-Screen Keys",
-    "description": "Crack the hidden five-letter word in six tries using color-coded letter and position clues.",
-    "thumbnail": "/src/assets/images/thumb_word_guess_1795322367690.jpg",
-    "iframe": "<iframe src=\"/games/word-guess.html\" title=\"Word Guess\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "serpent-grid",
-    "title": "Serpent Grid (Snake)",
+    "id": "paper-io-2",
+    "title": "Paper.io 2",
     "category": "Arcade",
-    "controls": "Arrow Keys or WASD",
-    "description": "Navigate the growing serpent across the grid, collect golden apples, and avoid collisions as speed increases.",
-    "thumbnail": "/src/assets/images/thumb_snake_1795322107359.jpg",
-    "iframe": "<iframe src=\"/games/snake.html\" title=\"Serpent Grid\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+    "controls": "Mouse, Arrow Keys, or WASD",
+    "description": "Expand your territory by drawing loops across the arena and closing paths back to your base before rivals cut your trail.",
+    "thumbnail": "",
+    "iframe": "<iframe width=\"900\" height=\"600\" src=\"https://gitallgames.github.io/projects/paperio2/index.html\" scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" id=\"gameFrame\" name=\"gameFrame\" data-origwidth=\"900\" data-origheight=\"600\" style=\"width: 516px; height: 344px;\"></iframe>"
   },
   {
-    "id": "brick-breaker",
-    "title": "Brick Breaker",
+    "id": "drift-hunters",
+    "title": "Drift Hunters",
     "category": "Arcade",
-    "controls": "Mouse or Left / Right Arrows",
-    "description": "Deflect the energy ball with your paddle to shatter multi-row brick walls and build combo multipliers.",
-    "thumbnail": "/src/assets/images/thumb_brick_breaker_1795322107878.jpg",
-    "iframe": "<iframe src=\"/games/brick-breaker.html\" title=\"Brick Breaker\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+    "controls": "Arrow Keys or WASD · Space for Handbrake",
+    "description": "Tune and customize drift cars, chain high-angle slides across asphalt circuits, and earn points to unlock upgrades.",
+    "thumbnail": "",
+    "iframe": "<iframe width=\"900\" height=\"600\" src=\"https://htmlxm.github.io/h/drift-hunters/\" scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" id=\"gameFrame\" name=\"gameFrame\" data-origwidth=\"900\" data-origheight=\"600\" style=\"width: 516px; height: 344px;\"></iframe>"
   },
   {
-    "id": "tile-2048",
-    "title": "2048 Tile Merge",
-    "category": "Puzzle",
-    "controls": "Arrow Keys or Swipe",
-    "description": "Slide numbered tiles across the 4x4 slate board to combine matching powers of two and reach 2048.",
-    "thumbnail": "/src/assets/images/thumb_2048_1795322107457.jpg",
-    "iframe": "<iframe src=\"/games/2048.html\" title=\"2048 Tile Merge\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "minesweeper",
-    "title": "Minesweeper",
-    "category": "Puzzle",
-    "controls": "Click to Reveal · Right-Click to Flag",
-    "description": "Deduce hidden mine locations using adjacency clues and clear the entire grid without triggering a blast.",
-    "thumbnail": "/src/assets/images/thumb_minesweeper_1795322105849.jpg",
-    "iframe": "<iframe src=\"/games/minesweeper.html\" title=\"Minesweeper\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "card-flip-match",
-    "title": "Card Flip Match",
-    "category": "Puzzle",
-    "controls": "Mouse or Touch",
-    "description": "Flip geometric symbol cards two at a time to uncover all matching pairs in as few moves as possible.",
-    "thumbnail": "/src/assets/images/thumb_memory_match_1795322106886.jpg",
-    "iframe": "<iframe src=\"/games/memory-match.html\" title=\"Card Flip Match\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
-  },
-  {
-    "id": "asteroid-dodge",
-    "title": "Asteroid Dodge",
+    "id": "slope",
+    "title": "Slope",
     "category": "Arcade",
-    "controls": "WASD, Arrows, or Mouse",
-    "description": "Pilot your interceptor through dense asteroid fields, collect shield cells, and survive rising wave speeds.",
-    "thumbnail": "/src/assets/images/thumb_space_dodger_1795322107859.jpg",
-    "iframe": "<iframe src=\"/games/space-dodger.html\" title=\"Asteroid Dodge\" allow=\"fullscreen\" allowfullscreen loading=\"lazy\"></iframe>"
+    "controls": "Left / Right Arrows or A / D",
+    "description": "Steer a speeding ball down an endless 3D neon slope, weave around red blocks, and survive as pace accelerates.",
+    "thumbnail": "",
+    "iframe": "<iframe src=\"https://slopegamesunblocked.com/slopegame160.html\" width=\"180px\" height=\"620px\" frameborder=\"0\" scrolling=\"no\"></iframe>"
+  },
+  {
+    "id": "obby-on-a-bike",
+    "title": "Obby on a Bike",
+    "category": "Arcade",
+    "controls": "WASD or Arrow Keys · Space to Jump",
+    "description": "Ride across narrow ramps, dodge spinning obstacles, and reach checkpoints in a fast-paced bicycle obstacle course.",
+    "thumbnail": "",
+    "iframe": "<iframe width=\"900\" height=\"600\" src=\"https://2playergames.gitlab.io/obby-on-a-bike/\" scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" id=\"gameFrame\" name=\"gameFrame\" data-origwidth=\"900\" data-origheight=\"600\" style=\"width: 823px; height: 548.667px;\"></iframe>"
   }
 ]
